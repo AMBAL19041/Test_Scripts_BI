@@ -1,0 +1,21 @@
+--
+- name: Cli-commands
+  hosts: switches
+  gather_facts: false
+  connection: local
+
+  vars:
+    cli:
+      username: netteam
+      password: 
+      timeout: 100
+
+  tasks:
+  - name: Создадим vlan
+    ios_config:
+      provider: "{{ cli }}"
+      lines:
+       - vlan 5
+
+    register: print_output
+

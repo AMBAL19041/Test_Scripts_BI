@@ -1,0 +1,50 @@
+Для линейки CE:
+
+Устновить ansible-galaxy collection install community.network
+
+--
+- name: CE
+  hosts: switches
+  connection: local
+  gather_facts: no
+  become_method: system-view
+  vars:
+    cli:
+      host: "{{ inventory_hostname }}"
+      port: "{{ ansible_ssh_port }}"
+      username: "{{ ansible_ssh_user }}"
+      password: "{{ ansible_ssh_pass }}"
+      transport: cli
+
+  tasks:
+  - name: "Change Hostname"
+    community.network.ce_config:
+      lines:
+        - vlan 5
+        - name Test
+      save: yes
+      provider: "{{ cli }}"
+
+
+
+
+
+
+Файл hosts
+[switches:vars]
+ansible_ssh_user=netteam
+ansible_ssh_pass=
+ansible_connection=ansible.netcommon.network_cli
+ansible_ssh_port=22
+ansible_network_os=community.network.ce
+
+Если не заработает, попробовать установить:
+sudo apt install python3-pip
+sudo apt install sshpass
+pip3 install ncclient
+
+
+Для линейки S  (не работает system-view, только display некоторые команды можно посмотреть):
+
+ansible switches -m ios_command -a "commands='display ip interface brief'"  - вывести сразу содержимое комманды
+

@@ -1,0 +1,38 @@
+
+#!/bin/bash
+set -x     #Видеть ход скрипта в терминале
+#Входные данные:
+USER="netteam"
+PASSWD="Gbyutcnm"
+LOG="telnnet_conn.log"   #Создатся файл куда будет записан весь ход выполнения скрипта
+number="/home/vagrant/hosts.txt"
+
+for H in $(cat $number)
+#if [[ $H = 10* ]]
+#then
+do
+echo START SCRIPT: >> $LOG
+date +%x-%R >> $LOG
+if [[ $H = 10* ]]
+then
+(
+sleep 1;
+echo -en "$USER\r";
+sleep 1;
+echo -en "$PASSWD\r";
+sleep 1;
+echo -en "enable\r";
+sleep 1;
+echo -en "conf\r";
+sleep 1;
+echo -en "vlan 58\r";
+sleep 1;
+echo -en "exit\r";
+echo -en "exit\r";
+echo -en "exit\r";
+echo -en "exit\r";
+sleep 1;
+) | telnet $H >> $LOG
+echo =================================== >> $LOG
+fi
+done
